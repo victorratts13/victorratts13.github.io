@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {%- if page.title -%}
   <h1 class="page-heading">{{ page.title }}</h1>
 {%- endif -%}
@@ -26,9 +26,8 @@ layout: default
     {%- for post in site.posts -%}
       <li>
         {%- assign date_format = site.plainwhite.date_format | default: "%b %-d, %Y" -%}
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          <h2 class="post-title">{{ post.title | escape }}</h2>
-        </a>
+	      <div id="repoTitle"></div>
+        
         <div class="post-meta">
           <div class="post-date">
             <i class="icon-calendar"></i>
@@ -55,3 +54,25 @@ layout: default
 		<use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
 	</svg><a href="{{ "/feed.xml" | relative_url }}">Subscribe</a></p> -->
 {%- endif -%}
+
+<script>
+$(document).ready(() => {
+	var subUl = '', dash;
+
+        $.get('https://api.github.com/users/victorratts13/repos', (gitData) => {
+            for (git of gitData) {
+                // dash = $.get(`https://api.github.com/repos/sttarMicroTech/${git.name}/contents/gitIcon/`, (repo) => {
+                //     //console.log(repo)
+                //     for(icon of repo){
+                //         return icon;
+                //     }
+                // })
+                //subUl += `<li><a class="dropdown-item" href="${git.html_url}">${git.name}</a></li>`;
+		    subUl += `<a class="post-link" href="${git.html_url}">
+          			<h2 class="post-title">${git.name}</h2>
+       			     </a>`;
+            }
+            $('#repoTitle').html(subUl)
+        })
+})
+</script>
